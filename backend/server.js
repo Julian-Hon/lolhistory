@@ -19,35 +19,34 @@ app.get("/api/:summonername/:summonertag", async (req,res)=>{
         );
         const pid = response.data.puuid;
         const response2 = await axios.get(
-            `https://americas.api.riotgames.com/lol/match/v5/matches/by-puuid/${pid}/ids?start=0&count=20&api_key=${RIOT_API_KEY}` 
+            `https://americas.api.riotgames.com/lol/match/v5/matches/by-puuid/${pid}/ids?start=0&count=5&api_key=${RIOT_API_KEY}` 
             );
         const matches = response2.data
         const gameTypes = [];
         const playerindex = [];
-        for(let i = 0; i<20;i++){
+        const playerChampname =[];
+        for(let i = 0; i<5;i++){
             const response3 = await axios.get(
                 `https://americas.api.riotgames.com/lol/match/v5/matches/${matches[i]}?api_key=${RIOT_API_KEY}`
             );
             gameTypes.push(response3.data.info.gameMode);
-            playerindex.push(response3.data.metadata.participants);
+            var player = response3.data.metadata.participants.indexOf(pid);
+            playerindex.push(player);
+            playerChampname.push(response3.data.info.participants[player].championName);
         }
+
+            
+
 
 
         res.json({
             puuid: pid,
             matches: matches,
             matchdetails: gameTypes,
-            playersindex: playerindex
+            playersindex: playerindex,
+            playersChampname: playerChampname,
             });
         
-    }catch(error){
-        console.error(error);
-        res.status(500).json({error: 'Error fetching data'});
-    }
-
-    try{
-        
-        res.json(response2.data);
     }catch(error){
         console.error(error);
         res.status(500).json({error: 'Error fetching data'});
