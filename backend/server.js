@@ -25,6 +25,11 @@ app.get("/api/:summonername/:summonertag", async (req,res)=>{
         const gameTypes = [];
         const playerindex = [];
         const playerChampname =[];
+        const playerkills = [];
+        const playerdeaths = [];
+        const playerassists =[];
+        const champLevel =[];
+        const items =[];
         for(let i = 0; i<5;i++){
             const response3 = await axios.get(
                 `https://americas.api.riotgames.com/lol/match/v5/matches/${matches[i]}?api_key=${RIOT_API_KEY}`
@@ -33,6 +38,12 @@ app.get("/api/:summonername/:summonertag", async (req,res)=>{
             var player = response3.data.metadata.participants.indexOf(pid);
             playerindex.push(player);
             playerChampname.push(response3.data.info.participants[player].championName);
+            playerkills.push(response3.data.info.participants[player].kills);
+            playerdeaths.push(response3.data.info.participants[player].deaths);
+            playerassists.push(response3.data.info.participants[player].assists);
+            champLevel.push(response3.data.info.participants[player].champLevel);
+            items[i]= [response3.data.info.participants[player].item0,response3.data.info.participants[player].item1,response3.data.info.participants[player].item2,response3.data.info.participants[player].item3,response3.data.info.participants[player].item4,response3.data.info.participants[player].item5,response3.data.info.participants[player].item6];
+            
         }
 
             
@@ -45,6 +56,11 @@ app.get("/api/:summonername/:summonertag", async (req,res)=>{
             matchdetails: gameTypes,
             playersindex: playerindex,
             playersChampname: playerChampname,
+            playerkills: playerkills,
+            playerdeaths: playerdeaths,
+            playerassists: playerassists,
+            champLevel: champLevel,
+            items: items,
             });
         
     }catch(error){
