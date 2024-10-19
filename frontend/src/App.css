@@ -4,7 +4,30 @@
   padding: 2rem;
   text-align: center;
 }
+.image-container {
+  position: relative;
+  display: inline-block;
+}
 
+.profileIcon{
+  display: block;
+  width: 50px; /* Set the width of your image */
+  height: 50px; /* Set the height of your image */
+  border-radius: 10px; /* Optional, for rounded corners */
+}
+
+.overlay-number {
+  position: absolute;
+  bottom: 5px;
+  left: 50%;
+  transform: translateX(-50%);
+  background-color: rgba(0, 0, 0, 0.7); /* Semi-transparent background */
+  color: white;
+  padding: 2px 6px;
+  border-radius: 10px;
+  font-size: 12px; /* Adjust font size */
+}
+/*
 .logo {
   height: 6em;
   padding: 1.5em;
@@ -40,3 +63,4 @@
 .read-the-docs {
   color: #888;
 }
+*/

@@ -1,9 +1,18 @@
 import mongoose from 'mongoose';
 
 const playerSchema = new mongoose.Schema({
+    profileIcon:{
+        type: String,
+        required: true,
+    },
+    summonerLevel:{
+        type: Number,
+        required: true,
+    },
     puuid:{
         type: String,
         required: true,
+        unique: true,
     },
     matches:{
         type: [String],

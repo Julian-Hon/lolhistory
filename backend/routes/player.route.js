@@ -13,6 +13,8 @@ router.post("/", async (req, res) => {
 
     const newPlayer = new Player(player);
     const requiredFields = [
+        'profileIcon',
+        'summonerLevel',
         'puuid',
         'matches',
         'gameType',
