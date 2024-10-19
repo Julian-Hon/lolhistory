@@ -5,10 +5,17 @@ export const createPlayer = async (req,res)=>{
     const {summonername, summonertag} = req.params;
     const RIOT_API_KEY = process.env.RIOT_API_KEY;
     try{
+        
         const response = await axios.get(
         `https://americas.api.riotgames.com/riot/account/v1/accounts/by-riot-id/${summonername}/${summonertag}?api_key=${RIOT_API_KEY}` 
         );
         const pid = response.data.puuid;
+
+        const response4 = await axios.get(
+            `https://na1.api.riotgames.com/lol/summoner/v4/summoners/by-puuid/${pid}?api_key=${RIOT_API_KEY}`
+        );
+        const profileIcon = response4.data.profileIconId;
+        const summonerLevel = response4.data.summonerLevel;
         const response2 = await axios.get(
             `https://americas.api.riotgames.com/lol/match/v5/matches/by-puuid/${pid}/ids?start=0&count=5&api_key=${RIOT_API_KEY}` 
             );
@@ -37,6 +44,9 @@ export const createPlayer = async (req,res)=>{
             
         }
         const playerData = {
+            profileIcon: profileIcon,
+            summonerLevel: summonerLevel,
+
             puuid: pid,
             matches: matches,
             gameType: gameTypes,
@@ -48,12 +58,17 @@ export const createPlayer = async (req,res)=>{
             champLevel: champLevel,
             items: items
         };
-
-        const newPlayer = new Player(playerData);
-        await newPlayer.save();
+        const existingItem = await Player.findOne({ puuid:  playerData.puuid });
+        if(!existingItem){
+            const newPlayer = new Player(playerData);
+            await newPlayer.save();
+            res.json({ success: true, data: newPlayer });
+        }
+        res.json({success: true, data: existingItem})
+        
 
         // Return saved player data as response
-        res.json({ success: true, data: newPlayer });
+
 
     }catch(error){
         console.error(error);
